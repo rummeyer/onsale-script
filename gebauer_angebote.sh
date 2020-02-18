@@ -40,4 +40,4 @@ done
 
 # remove all downloaded files
 echo "Deleting temp dir..."
-#rm -rf "${TEMPDIR}"
+rm -rf "${TEMPDIR}"
