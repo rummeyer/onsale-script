@@ -15,7 +15,7 @@ echo "Tempdir is ${TEMPDIR}"
 mkdir "${TEMPDIR}"
 cd "${TEMPDIR}"
 
-PATTERN="*[-_]KW${WEEK}[-_.]*pdf"
+PATTERN="*KW*${WEEK}*pdf"
 
 # get files from website
 wget --ignore-case -r -A "${PATTERN}" https://www.gebauer-markt.de/
@@ -27,15 +27,14 @@ find . -iname "${PATTERN}" -exec mpack -s "GEBAUER ANGEBOTE - Prospekt KW${WEEK}
 
 # send alert if favorite keywords found
 IFS=$'\n'
-KEYWORDS="Schweitzers Schüümli
+KEYWORDS="Schüümli
 Ensinger
-Live Fresh Shot
-Innocent
-Garden Gourmet"
+Garden Gourmet
+Bonne Maman"
 
 for KEYWORD in ${KEYWORDS}; do
   echo "Processing '${KEYWORD}' alert..."
-  find . -iname "${PATTERN}" -print0 | xargs -I{} -0 pdftotext -q {} - | grep -i -C 10 "$KEYWORD" | mail --exec 'set nonullbody' -s "GEBAUER ANGEBOTE - Reduziert '${KEYWORD}'" oliver@rummeyer.de sarah@rummeyer.de
+  find . -iname "${PATTERN}" -print0 | xargs -I{} -0 pdftotext -q {} - | grep -i -C 10 "$KEYWORD" | mail --exec 'set nonullbody' -s "GEBAUER ANGEBOTE - Reduziert '${KEYWORD}'" oliver@rummeyer.de
 done
 
 # remove all downloaded files
